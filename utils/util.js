@@ -1,7 +1,7 @@
 const path = require('path');
 
 function getDigitalApplicationPDFLocation() {
-    const fileName = 'digitalApplicationForm.pdf';
+    const fileName = '<your_pdf_name>.pdf';
     const dirname = '/tmp';
     return path.join(dirname, fileName);
 }
