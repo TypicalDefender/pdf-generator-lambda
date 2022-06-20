@@ -15,7 +15,7 @@ const handler = async (event) => {
         const pdfBody = utils.formatObjectToArray(body);
         const digitalApplicationForm = new DigitalApplicationForm(pdfBody);
         await digitalApplicationForm.generatePDF();
-        const pdfPath = utils.getDigitalApplicationPDFLocation();
+        const pdfPath = utils.getPDFLocation();
         await new PDFStream(pdfPath).upload();
         await new RimRaf(pdfPath).cleanUp();
         logger.log('PDF generated');
