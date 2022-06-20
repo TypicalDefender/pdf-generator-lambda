@@ -1,39 +1,35 @@
-/*
-    Simple tables with node and pdfkit
-    https://www.andronio.me/2017/09/02/pdfkit-tables/
-*/
-
-// Import dependencies
-const PDFDocument = require("pdfkit");
+const PDFDocument = require('pdfkit');
 
 class PDFDocumentWithTables extends PDFDocument {
     constructor(options) {
         super(options);
     }
-    computeRowHeight(row, columnWidth, rowSpacing){
+
+    computeRowHeight(row, columnWidth, rowSpacing) {
         let result = 0;
 
         row.forEach((cell) => {
             const cellHeight = this.heightOfString(cell, {
                 width: columnWidth,
-                align: "left"
+                align: 'left',
             });
             result = Math.max(result, cellHeight);
         });
 
         return result + rowSpacing;
     }
-    table(table, arg0, arg1, arg2) {
-        let startX = this.page.margins.left, startY = this.y;
+
+    createTable(table, arg0, arg1, arg2) {
+        let startX = this.page.margins.left,
+            startY = this.y;
         let options = {};
 
-        if ((typeof arg0 === "number") && (typeof arg1 === "number")) {
+        if (typeof arg0 === 'number' && typeof arg1 === 'number') {
             startX = arg0;
             startY = arg1;
 
-            if (typeof arg2 === "object")
-                options = arg2;
-        } else if (typeof arg0 === "object") {
+            if (typeof arg2 === 'object') options = arg2;
+        } else if (typeof arg0 === 'object') {
             options = arg0;
         }
 
@@ -41,10 +37,10 @@ class PDFDocumentWithTables extends PDFDocument {
         const columnCount = 2;
         const columnSpacing = options.columnSpacing || 15;
         const rowSpacing = options.rowSpacing || 5;
-        const usableWidth = options.width || (this.page.width - this.page.margins.left - this.page.margins.right);
+        const usableWidth = options.width || this.page.width - this.page.margins.left - this.page.margins.right;
 
-        const prepareHeader = options.prepareHeader || (() => { });
-        const prepareRow = options.prepareRow || (() => { });
+        const prepareHeader = options.prepareHeader || (() => {});
+        const prepareRow = options.prepareRow || (() => {});
 
         const columnContainerWidth = usableWidth / columnCount;
         const columnWidth = columnContainerWidth - columnSpacing;
@@ -52,7 +48,7 @@ class PDFDocumentWithTables extends PDFDocument {
 
         let rowBottomY = 0;
 
-        this.on("pageAdded", () => {
+        this.on('pageAdded', () => {
             startY = this.page.margins.top;
             rowBottomY = 0;
         });
@@ -61,15 +57,16 @@ class PDFDocumentWithTables extends PDFDocument {
         prepareHeader();
 
         // Check to have enough room for header and first rows
-        if (startY + 3 * this.computeRowHeight(table.headers, columnWidth, rowSpacing) > maxY)
-            this.addPage();
+        if (startY + 3 * this.computeRowHeight(table.headers, columnWidth, rowSpacing) > maxY) this.addPage();
 
         // Print all headers
         table.headers.forEach((header, i) => {
-            this.font("Courier-Bold").fontSize(10).text(header, startX + i * columnContainerWidth, startY, {
-                width: columnWidth,
-                align: "left"
-            });
+            this.font('Courier-Bold')
+                .fontSize(10)
+                .text(header, startX + i * columnContainerWidth, startY, {
+                    width: columnWidth,
+                    align: 'left',
+                });
         });
 
         // Refresh the y coordinate of the bottom of the headers row
@@ -82,14 +79,12 @@ class PDFDocumentWithTables extends PDFDocument {
             .stroke();
 
         table.rows.forEach((row, i) => {
-            const rowHeight = this.computeRowHeight(row,columnWidth, rowSpacing);
+            const rowHeight = this.computeRowHeight(row, columnWidth, rowSpacing);
 
             // Switch to next page if we cannot go any further because the space is over.
             // For safety, consider 3 rows margin instead of just one
-            if (startY + 3 * rowHeight < maxY)
-                startY = rowBottomY + rowSpacing;
-            else
-                this.addPage();
+            if (startY + 3 * rowHeight < maxY) startY = rowBottomY + rowSpacing;
+            else this.addPage();
 
             // Allow the user to override style for rows
             prepareRow(row, i);
@@ -98,7 +93,7 @@ class PDFDocumentWithTables extends PDFDocument {
             row.forEach((cell, i) => {
                 this.text(cell, startX + i * columnContainerWidth, startY, {
                     width: columnWidth,
-                    align: "left"
+                    align: 'left',
                 });
             });
 

@@ -1,15 +1,38 @@
 {
-  "name": "pdf-poc",
+  "name": "pdf-digi",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint .",
+    "docs": "./node_modules/.bin/jsdoc -c jsdoc.json -r"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "devDependencies": {
+    "better-docs": "^2.3.2",
+    "eslint": "^8.17.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "husky": "^4.3.8",
+    "jsdoc": "^3.6.6",
+    "lint-staged": "^13.0.1",
+    "prettier": "^2.7.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "echo 'Running Type Check' && lint-staged && npm run lint"
+    }
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache --fix",
+    "*.{js,md}": "prettier --write \"**/*.js\""
+  },
   "dependencies": {
-    "pdfkit": "^0.13.0"
+    "pdfkit": "^0.13.0",
+    "rimraf": "^3.0.2",
+    "@sentry/node": "^7.1.1"
   }
 }
