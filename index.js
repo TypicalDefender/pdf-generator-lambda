@@ -1,7 +1,7 @@
 process.env['APP_HOME'] = process.cwd();
 const utils = require('./utils/util');
 const { logger } = require('./utils/logger');
-const { DigitalApplicationForm } = require('./managers/pdf/digitalApplicationForm');
+const { Form } = require('./managers/pdf/form');
 const { RimRaf } = require('./managers/rimraf/cleanUpPDF');
 const { PDFStream } = require('./managers/pdf/pdfStream');
 
@@ -13,7 +13,7 @@ const handler = async (event) => {
         let { body } = eventList[0];
         if (typeof body === 'string') body = JSON.parse(body);
         const pdfBody = utils.formatObjectToArray(body);
-        const digitalApplicationForm = new DigitalApplicationForm(pdfBody);
+        const digitalApplicationForm = new Form(pdfBody);
         await digitalApplicationForm.generatePDF();
         const pdfPath = utils.getPDFLocation();
         await new PDFStream(pdfPath).upload();
