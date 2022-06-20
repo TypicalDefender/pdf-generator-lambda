@@ -14,9 +14,7 @@ class DigitalApplicationForm {
             .fontSize(20)
             .fontSize(10)
             .font('Courier-Bold')
-            .text('www.sliceit.com', 200, 50, { align: 'right' })
-            .text('help@sliceit.com', 200, 65, { align: 'right' })
-            .text('+91-8047096430', 200, 80, { align: 'right' })
+            .text('sarthak.acoustic@gmail.com', 200, 50, { align: 'right' })
             .moveDown();
     }
 
